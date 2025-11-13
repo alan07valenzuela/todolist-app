@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Task } from "./types";
 
 function App() {
   const [input, setInput] = useState("");
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    let localTasks = localStorage.getItem("tasks");
+    console.log(localTasks);
+    
+    return localTasks ? JSON.parse(localTasks) : [];
+  });
+
+  useEffect(() => {localStorage.setItem("tasks", JSON.stringify(tasks))}, [tasks]);
 
   function addTask() {
     const inputFree = input.trim();
